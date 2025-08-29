@@ -4,7 +4,7 @@ using MongoDB.Entities;
 using SearchService.Models;
 
 namespace SearchService.Consumers;
-public class QuctionFinishedConsumer : IConsumer<AuctionFinished>
+public class AuctionFinishedConsumer : IConsumer<AuctionFinished>
 {
     public async Task Consume(ConsumeContext<AuctionFinished> context)
     {

@@ -32,11 +32,6 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
-    healthcheck:
-      test: ["rabbitmq-diagnostics cgeck_port_connectivity", "arg"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
   auction-svc:
     image: akhalfaoui/auction-svc:latest
     build:
@@ -47,13 +42,11 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - RabbitMq__Host=rabbitmq
       - ConnectionStrings__DefaultConnection=Server=postgres:5432;User Id=postgres;Password=postgrespw;Database=auctions
-      - IdentityServiceUrl=http://identity-svc
+      - IdentityServiceUrl=http://identity-svc/
     ports:
       - 7001:80
     depends_on:
       postgres:
-        condition: service_healthy
-      rabbitmq:
         condition: service_healthy
   search-svc:
     image: akhalfaoui/search-svc:latest
@@ -65,13 +58,11 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - RabbitMq__Host=rabbitmq
       - ConnectionStrings__MongoDbConnection=mongodb://root:mongopw@mongodb
-      - AuctionServiceUrl=http://auction-svc
+      - AuctionServiceUrl=http://auction-svc/
     ports:
       - 7002:80
     depends_on:
-      mongo:
-        condition: service_healthy
-      rabbitmq:
+      mongodb:
         condition: service_healthy
   identity-svc:
     image: akhalfaoui/identity-svc:latest
@@ -81,7 +72,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__DefaultConnection=Server=localhost:5432;User Id=postgres;Password=postgrespw;Database=identity
+      - ConnectionStrings__DefaultConnection=Server=postgres:5432;User Id=postgres;Password=postgrespw;Database=identity
     ports:
       - 5001:80
     depends_on:

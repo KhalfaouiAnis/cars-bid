@@ -5,7 +5,7 @@
       "Microsoft.AspNetCore": "Information"
     }
   },
-  "IdentityServiceUrl": "http://identity-svc:5001",
+  "IdentityServiceUrl": "http://identity-svc",
   "ReverseProxy": {
     "Clusters": {
       "auctions": {
