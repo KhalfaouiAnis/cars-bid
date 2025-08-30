@@ -32,6 +32,11 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
   auction-svc:
     image: akhalfaoui/auction-svc:latest
     build:
@@ -62,6 +67,8 @@ services:
     ports:
       - 7002:80
     depends_on:
+      rabbitmq:
+        condition: service_healthy
       mongodb:
         condition: service_healthy
   identity-svc:
