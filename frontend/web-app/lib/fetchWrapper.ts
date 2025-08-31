@@ -39,7 +39,7 @@ async function put(url: string, body: unknown) {
 
 async function del(url: string) {
   const requestOptions = {
-    method: "Delete",
+    method: "DELETE",
     headers: await getHeaders(),
   };
 

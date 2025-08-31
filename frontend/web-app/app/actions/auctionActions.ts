@@ -16,7 +16,7 @@ export async function updateAuctionTest(): Promise<{
     mileage: Math.floor(Math.random() * 10000) + 1,
   };
 
-  return fetchWrapper.put("auctions/blahbla", data);
+  return fetchWrapper.put("auctions/466e4744-4dc5-4987-aae0-b621acfc5e39", data);
 }
 
 export async function createAuction(data: FieldValues) {
@@ -25,4 +25,15 @@ export async function createAuction(data: FieldValues) {
 
 export async function getDetailedViewData(id: string): Promise<Auction> {
   return fetchWrapper.get(`auctions/${id}`);
+}
+
+export async function deleteAuction(id: string) {
+  return fetchWrapper.del(`auctions/${id}`);
+}
+
+export async function updateAuction(
+  data: FieldValues,
+  id: string
+): Promise<Auction> {
+  return fetchWrapper.put(`auctions/${id}`, data);
 }
