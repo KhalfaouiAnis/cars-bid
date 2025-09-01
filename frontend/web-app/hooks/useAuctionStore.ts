@@ -22,7 +22,9 @@ export const useAuctionStore = create<State & Actions>((set) => ({
   ...initialState,
   setData: (data: PagedResult<Auction>) => {
     set(() => ({
-      ...data,
+      auctions: data.results,
+      pageCount: data.pageCount,
+      totalCount: data.totalCount
     }));
   },
   setCurrentPrice: (auctionId: string, amount: number) => {

@@ -15,6 +15,7 @@ public class AuctionPlacedConsumer : IConsumer<BidPlaced>
     }
     public async Task Consume(ConsumeContext<BidPlaced> context)
     {
+        Console.WriteLine("--> bid placed message received");
         await _hubContext.Clients.All.SendAsync("BidPlaced", context.Message);
     }
 }

@@ -1,7 +1,7 @@
 using AuctionService.Data;
 using Grpc.Core;
 
-namespace AuctionService;
+namespace AuctionService.Services;
 
 public class GrpcAuctionService : GrpcAuction.GrpcAuctionBase
 {
@@ -13,6 +13,8 @@ public class GrpcAuctionService : GrpcAuction.GrpcAuctionBase
 
     public override async Task<GrpcAuctionResponse> GetAuction(GetAuctionRequest request, ServerCallContext context)
     {
+        Console.WriteLine("==> Received Grpc request for auction");
+        
         var auction = await _dbcontext.Auctions.FindAsync(Guid.Parse(request.Id))
             ?? throw new RpcException(new Status(StatusCode.NotFound, "Not found"));
 

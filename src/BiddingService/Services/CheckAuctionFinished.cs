@@ -1,7 +1,7 @@
 
 using BiddingService.Models;
 using Contracts;
-using MassTransit.Transports;
+using MassTransit;
 using MongoDB.Entities;
 
 namespace BiddingService.Services;
@@ -40,7 +40,7 @@ public class CheckAuctionFinished : BackgroundService
         _logger.LogInformation("===> Found {count} auctions that have completed", finishedAuctions.Count);
 
         using var scope = _services.CreateScope();
-        var endpoint = scope.ServiceProvider.GetRequiredService<PublishEndpoint>();
+        var endpoint = scope.ServiceProvider.GetRequiredService<IPublishEndpoint>();
 
         foreach (var auction in finishedAuctions)
         {

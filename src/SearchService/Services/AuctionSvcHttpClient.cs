@@ -3,16 +3,10 @@ using SearchService.Models;
 
 namespace SearchService.Services;
 
-public class AuctionSvcHttpClient
+public class AuctionSvcHttpClient(HttpClient httpClient, IConfiguration config)
 {
-
-    private readonly HttpClient _httpClient;
-    private readonly IConfiguration _config;
-    public AuctionSvcHttpClient(HttpClient httpClient, IConfiguration config)
-    {
-        _httpClient = httpClient;
-        _config = config;
-    }
+    private readonly HttpClient _httpClient = httpClient;
+    private readonly IConfiguration _config = config;
 
     public async Task<List<Item>> GetItemsForSearchDb()
     {
