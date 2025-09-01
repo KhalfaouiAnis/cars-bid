@@ -19,7 +19,8 @@ const nextConfig: NextConfig = {
         hostname: 'catalogue.automobile.tn'
       }
     ]
-  }
+  },
+  output: 'standalone'
 };
 
 export default withFlowbiteReact(nextConfig);

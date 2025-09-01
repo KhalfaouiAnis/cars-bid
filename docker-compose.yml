@@ -69,7 +69,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - RabbitMq__Host=rabbitmq
       - ConnectionStrings__MongoDbConnection=mongodb://root:mongopw@mongodb
-      - AuctionServiceUrl=http://auction-svc/
+      - AuctionServiceUrl=http://auction-svc
     ports:
       - 7002:80
     depends_on:
@@ -87,7 +87,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - RabbitMq__Host=rabbitmq
       - ConnectionStrings__BidDbConnection=mongodb://root:mongopw@mongodb
-      - IdentityServiceUrl=http://identity-svc/
+      - IdentityServiceUrl=http://identity-svc
       - GrpcAuction=http://auction-svc:7777
 
     ports:
@@ -119,6 +119,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
+      - IssuerUri=http://localhost:5001
+      - ClientApp="http://localhost:3000"
       - ConnectionStrings__DefaultConnection=Server=postgres:5432;User Id=postgres;Password=postgrespw;Database=identity
     ports:
       - 5001:80
@@ -135,6 +137,22 @@ services:
       - ASPNETCORE_URLS=http://+:80
     ports:
       - 6001:80
+  web-app:
+    image: akhalfaoui/web-app:latest
+    build:
+      context: .
+      dockerfile: frontend/web-app/Dockerfile
+    volumes:
+      - /var/lib/web/data
+    ports:
+      - 3000:3000
+    environment:
+      - AUTH_SECRET="5HWU2vbewT99qgKmMbwhJnvMQ1KJnkkjyv2n8ex2ZpA="
+      - API_URL=http://gateway-svc
+      - ID_URL=http://localhost:5001
+      - ID_URL_INTERNAL=http://identity-svc
+      - AUTH_URL=http://localhost:3000
+      - AUTH_URL_INTERNAL=http://web-app:3000
 volumes:
   pgdata:
   mongodata:
