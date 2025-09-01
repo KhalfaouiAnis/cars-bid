@@ -1,7 +1,7 @@
 "use server";
 
 import { fetchWrapper } from "@/lib/fetchWrapper";
-import { Auction, PagedResult } from "@/types";
+import { Auction, Bid, PagedResult } from "@/types";
 import { FieldValues } from "react-hook-form";
 
 export async function getData(query: string): Promise<PagedResult<Auction>> {
@@ -16,7 +16,10 @@ export async function updateAuctionTest(): Promise<{
     mileage: Math.floor(Math.random() * 10000) + 1,
   };
 
-  return fetchWrapper.put("auctions/466e4744-4dc5-4987-aae0-b621acfc5e39", data);
+  return fetchWrapper.put(
+    "auctions/466e4744-4dc5-4987-aae0-b621acfc5e39",
+    data
+  );
 }
 
 export async function createAuction(data: FieldValues) {
@@ -36,4 +39,12 @@ export async function updateAuction(
   id: string
 ): Promise<Auction> {
   return fetchWrapper.put(`auctions/${id}`, data);
+}
+
+export async function getBidsForAuction(id: string): Promise<Bid[]> {
+  return fetchWrapper.get(`bids/${id}`);
+}
+
+export async function placeBidForAuction(auctionId: string, amount: number) {
+  return fetchWrapper.post(`bids/?auctionId=${auctionId}&amount=${amount}`, {});
 }

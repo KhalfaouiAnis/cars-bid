@@ -33,7 +33,7 @@ export default function Search() {
                 placeholder="Search for cars by make, model or color"
                 onChange={handleChange}
                 value={value}
-                className="flex-grow pl-5 bg-transparent focus:outline-none border-transparent focus:border-transparent focus:ring-0 text-sm text-gray-600"
+                className="input-custom"
             />
             <button onClick={handleSearch}>
                 <FaSearch size={34}

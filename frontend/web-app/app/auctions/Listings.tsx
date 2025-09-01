@@ -4,16 +4,14 @@ import AuctionCard from "./AuctionCard";
 import { Fragment, useEffect, useState } from "react";
 import AppPagination from "../components/AppPagination";
 import { getData } from "../actions/auctionActions";
-import { Auction, PagedResult } from "@/types";
 import Filters from "./Filters";
 import { useParamsStore } from "@/hooks/useParamsStore";
 import { useShallow } from "zustand/shallow";
 import qs from "query-string";
 import EmptyFilter from "../components/EmptyFilter";
+import { useAuctionStore } from "@/hooks/useAuctionStore";
 
 export default function Listings() {
-    const [data, setData] = useState<PagedResult<Auction>>()
-
     const params = useParamsStore(useShallow(state => ({
         pageNumber: state.pageNumber,
         pageSize: state.pageSize,
@@ -24,6 +22,8 @@ export default function Listings() {
         winner: state.winner,
     })))
 
+    const { auctions, totalCount, pageCount, setData } = useAuctionStore(useShallow(state => state))
+    const [loading, setLoading] = useState(true);
     const setParams = useParamsStore(state => state.setParams)
 
     const url = qs.stringifyUrl({ url: '', query: params }, { skipEmptyString: true })
@@ -35,21 +35,22 @@ export default function Listings() {
     useEffect(() => {
         getData(url).then(data => {
             setData(data);
+            setLoading(false)
         })
-    }, [url])
+    }, [url, setData])
 
-    if (!data) return <h3>Loading...</h3>
+    if (loading) return <h3>Loading...</h3>
 
     return (
         <Fragment>
             <Filters />
             {
-                data.totalCount === 0 ? (
+                totalCount === 0 ? (
                     <EmptyFilter showReset />
                 ) : (
                     <Fragment>
                         <div className="grid grid-cols-4 gap-6">
-                            {data && data.results.map((auction) => (
+                            {auctions && auctions.map((auction) => (
                                 <AuctionCard auction={auction} key={auction.id} />
                             ))}
                         </div>
@@ -57,7 +58,7 @@ export default function Listings() {
                             <AppPagination
                                 pageChanged={setPageNumber}
                                 currentPage={params.pageNumber}
-                                pageCount={data.pageCount}
+                                pageCount={pageCount}
                             />
                         </div>
                     </Fragment>
